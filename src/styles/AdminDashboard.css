@@ -1,0 +1,73 @@
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.app-title {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.user-name {
+  margin-right: 1rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.logout-btn {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+}
+
+.dashboard-content {
+  padding: 1.5rem 2rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.stat-card h3 {
+  margin-top: 0;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.stat-card p {
+  margin: 0.3rem 0 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.panel {
+  background: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.panel h3 {
+  margin-top: 0;
+}

@@ -1,0 +1,8 @@
+.achievement-card { padding:12px; border-radius:10px; box-shadow:0 8px 26px rgba(2,6,23,0.04); }
+.card-green { background: #ecfdf5; }
+.card-blue { background: #e8f0ff; }
+.card-red { background: #fff1f2; }
+.ac-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.ac-body p { margin:4px 0; color:#374151; }
+.ac-desc { color:#374151; margin-top:8px; }
+.ac-footer { display:flex; gap:8px; margin-top:12px; }

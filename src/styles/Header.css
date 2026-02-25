@@ -1,0 +1,5 @@
+.app-header { display:flex; justify-content:space-between; align-items:center; padding: 8px 0 18px 0; }
+.app-header h1 { margin: 0; font-size: 20px; }
+.header-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.header-actions { display:flex; gap: 10px; align-items:center; }
+.search-input { padding:8px 10px; border-radius: 8px; border: 1px solid #e5e7eb; }

@@ -1,34 +1,89 @@
-import React from "react";
+// src/pages/ViewAchievements.jsx
+import React, { useState, useContext } from "react";
 import "../styles/Forms.css";
 import AchievementCard from "../components/AchievementCard";
-
-const dummyAchievements = [
-  {
-    id: 1,
-    title: "Hackathon Winner",
-    category: "Academic",
-    level: "National",
-    date: "2025-10-10",
-    description: "Won first prize in national level hackathon."
-  },
-  {
-    id: 2,
-    title: "Inter-college Football",
-    category: "Sports",
-    level: "College",
-    date: "2025-08-05",
-    description: "Secured gold medal in football tournament."
-  }
-];
+import { AchievementContext } from "../context/AchievementContext";
 
 const ViewAchievements = () => {
+  const { achievements } = useContext(AchievementContext);
+  const [categoryFilter, setCategoryFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [search, setSearch] = useState("");
+
+  const total = achievements.length;
+  const approvedCount = achievements.filter(
+    (a) => a.status === "Approved"
+  ).length;
+  const pendingCount = achievements.filter(
+    (a) => a.status === "Pending"
+  ).length;
+
+  const filtered = achievements.filter((a) => {
+    const catOk = categoryFilter === "All" || a.category === categoryFilter;
+    const statusOk = statusFilter === "All" || a.status === statusFilter;
+    const searchOk =
+      search.trim() === "" ||
+      a.title.toLowerCase().includes(search.toLowerCase()) ||
+      (a.eventName || "")
+        .toLowerCase()
+        .includes(search.toLowerCase());
+    return catOk && statusOk && searchOk;
+  });
+
   return (
     <div className="page-container">
-      <h2>Achievements</h2>
+      <div className="page-header-row">
+        <h2>Achievements</h2>
+        <div className="filters-row">
+          <input
+            type="text"
+            placeholder="Search by title / event"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+          >
+            <option value="All">All Categories</option>
+            <option value="Academic">Academic</option>
+            <option value="Co-curricular">Co-curricular</option>
+            <option value="Sports">Sports</option>
+          </select>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="All">All Status</option>
+            <option value="Approved">Approved</option>
+            <option value="Pending">Pending</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="ach-summary-row">
+        <div className="ach-summary-card">
+          <span>Total</span>
+          <strong>{total}</strong>
+        </div>
+        <div className="ach-summary-card">
+          <span>Approved</span>
+          <strong>{approvedCount}</strong>
+        </div>
+        <div className="ach-summary-card">
+          <span>Pending</span>
+          <strong>{pendingCount}</strong>
+        </div>
+      </div>
+
       <div className="card-grid">
-        {dummyAchievements.map((a) => (
-          <AchievementCard key={a.id} achievement={a} />
-        ))}
+        {filtered.length === 0 ? (
+          <p style={{ marginTop: "1rem" }}>No achievements found.</p>
+        ) : (
+          filtered.map((a) => (
+            <AchievementCard key={a.id} achievement={a} />
+          ))
+        )}
       </div>
     </div>
   );

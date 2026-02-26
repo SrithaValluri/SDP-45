@@ -1,13 +1,9 @@
+// src/App.jsx
 import React, { useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
-import AddAchievement from "./pages/AddAchievement";
-import ManageParticipation from "./pages/ManageParticipation";
-import ViewAchievements from "./pages/ViewAchievements";
-import StudentProfile from "./pages/StudentProfile";
-import GenerateReports from "./pages/GenerateReports";
 import NotFound from "./pages/NotFound";
 import { AuthContext } from "./context/AuthContext";
 
@@ -42,8 +38,10 @@ const App = () => {
           )
         }
       />
+
       <Route path="/login" element={<LoginPage />} />
 
+      {/* Admin layout with sidebar */}
       <Route
         path="/admin/*"
         element={
@@ -52,6 +50,8 @@ const App = () => {
           </PrivateRoute>
         }
       />
+
+      {/* Student layout with sidebar */}
       <Route
         path="/student/*"
         element={
@@ -61,47 +61,7 @@ const App = () => {
         }
       />
 
-      {/* Fallback pages for direct paths */}
-      <Route
-        path="/add-achievement"
-        element={
-          <PrivateRoute role="student">
-            <AddAchievement />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/manage-participation"
-        element={
-          <PrivateRoute role="admin">
-            <ManageParticipation />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/view-achievements"
-        element={
-          <PrivateRoute>
-            <ViewAchievements />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/profile"
-        element={
-          <PrivateRoute>
-            <StudentProfile />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/reports"
-        element={
-          <PrivateRoute role="admin">
-            <GenerateReports />
-          </PrivateRoute>
-        }
-      />
+      {/* 404 */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

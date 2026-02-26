@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "../styles/Forms.css";
 
 const initialData = [
-  { id: 1, student: "John Doe", event: "Hackathon", status: "Pending" },
-  { id: 2, student: "Alice", event: "Paper Presentation", status: "Approved" }
+  { id: 1, student: "Raj", event: "Hackathon", status: "Pending" },
+  { id: 2, student: "Kiran", event: "Paper Presentation", status: "Approved" }
 ];
 
 const ManageParticipation = () => {

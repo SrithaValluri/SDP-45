@@ -22,7 +22,7 @@ const GenerateReports = () => {
         title: "Department-wise Achievement Summary",
         fromDate: filters.fromDate || "2025-01-01",
         toDate: filters.toDate || "2025-12-31",
-        summary: "Dummy report: total 450 achievements across all departments."
+        summary: "total 450 achievements across all departments."
       }
     ]);
   };

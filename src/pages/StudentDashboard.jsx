@@ -1,12 +1,14 @@
 // src/pages/StudentDashboard.jsx
-import React from "react";
+import React, { useContext } from "react";
 import { Routes, Route } from "react-router-dom";
 import "../styles/StudentDashboard.css";
 import "../styles/Forms.css";
 import StudentSidebar from "../components/StudentSidebar";
 import Header from "../components/Header";
 import StudentProfile from "./StudentProfile";
+import { AchievementContext } from "../context/AchievementContext";
 
+// Schedule page
 const Schedule = () => (
   <div className="page-container">
     <h2>Schedule</h2>
@@ -15,30 +17,30 @@ const Schedule = () => (
         <tr>
           <th>Day</th>
           <th>Time</th>
-          <th>Course</th>
+          <th>Activity</th>
           <th>Room</th>
-          <th>Faculty</th>
+          <th>Mentor</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>Monday</td>
           <td>09:00 – 10:00</td>
-          <td>DBMS</td>
-          <td>CS-201</td>
+          <td>Club Activities</td>
+          <td>Lab-1</td>
           <td>Dr. Rao</td>
         </tr>
         <tr>
           <td>Monday</td>
           <td>11:00 – 12:00</td>
-          <td>Data Structures</td>
+          <td>Problem Solving</td>
           <td>CS-105</td>
           <td>Mrs. Kavya</td>
         </tr>
         <tr>
           <td>Tuesday</td>
           <td>10:00 – 11:00</td>
-          <td>Computer Networks</td>
+          <td>Project Discussion</td>
           <td>CS-301</td>
           <td>Mr. Ramesh</td>
         </tr>
@@ -47,6 +49,7 @@ const Schedule = () => (
   </div>
 );
 
+// Upcoming events page
 const UpcomingEvents = () => (
   <div className="page-container">
     <h2>Upcoming Events</h2>
@@ -55,14 +58,16 @@ const UpcomingEvents = () => (
         <h3>Coding Contest</h3>
         <p className="card-meta">Date: 28 Feb • Venue: Lab-1</p>
         <p className="card-body">
-          Intra-college competitive programming contest. Teams of 2–3, 3 hours duration.
+          Intra-college competitive programming contest. Teams of 2–3, 3 hours
+          duration.
         </p>
       </div>
       <div className="card">
         <h3>Project Expo</h3>
         <p className="card-meta">Date: 10 Mar • Venue: CSE Block</p>
         <p className="card-body">
-          Display your semester projects. Best projects will receive certificates and prizes.
+          Display your semester projects. Best projects will receive
+          certificates and prizes.
         </p>
       </div>
       <div className="card">
@@ -76,6 +81,7 @@ const UpcomingEvents = () => (
   </div>
 );
 
+// Progress bar small component
 const ProgressBar = ({ label, value }) => {
   return (
     <div className="progress-row">
@@ -90,6 +96,7 @@ const ProgressBar = ({ label, value }) => {
   );
 };
 
+// Progress page
 const ProgressPage = () => (
   <div className="page-container">
     <h2>Progress</h2>
@@ -112,50 +119,81 @@ const ProgressPage = () => (
       <div className="card">
         <h3>Goals</h3>
         <p className="card-body">
-          Target: 2 more academic achievements and 1 project certificate before end of semester.
+          Target: 2 more academic achievements and 1 project certificate before
+          end of semester.
         </p>
       </div>
     </div>
   </div>
 );
 
-const CertificatesPage = () => (
-  <div className="page-container">
-    <h2>Certificates</h2>
-    <table className="table">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Category</th>
-          <th>Date</th>
-          <th>Download</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Smart India Hackathon</td>
-          <td>Academic</td>
-          <td>2025-10-10</td>
-          <td>
-            <button className="primary-btn">View</button>
-          </td>
-        </tr>
-        <tr>
-          <td>Inter-college Football</td>
-          <td>Sports</td>
-          <td>2025-08-05</td>
-          <td>
-            <button className="primary-btn">View</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-);
+// Certificates page (uses context)
+const CertificatesPage = () => {
+  const { achievements } = useContext(AchievementContext);
 
+  return (
+    <div className="page-container">
+      <h2>Certificates</h2>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Date</th>
+            <th>View</th>
+            <th>Download</th>
+          </tr>
+        </thead>
+        <tbody>
+          {achievements.map((a) => (
+            <tr key={a.id}>
+              <td>{a.title}</td>
+              <td>{a.category}</td>
+              <td>{a.date}</td>
+              <td>
+                {a.certificateUrl ? (
+                  <a
+                    href={a.certificateUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="primary-btn"
+                  >
+                    View
+                  </a>
+                ) : (
+                  "-"
+                )}
+              </td>
+              <td>
+                {a.certificateUrl ? (
+                  <a
+                    href={a.certificateUrl}
+                    download
+                    className="primary-btn"
+                  >
+                    Download
+                  </a>
+                ) : (
+                  "-"
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+// Home dashboard
 const StudentHome = () => {
   return (
     <div className="dashboard-content">
+      <div className="student-header">
+        <h2>Student Dashboard</h2>
+        <p>Quick glance at your schedule, progress, and upcoming events.</p>
+      </div>
+
       <div className="stats-grid">
         <div className="stat-card">
           <h3>Next Class</h3>
@@ -179,8 +217,9 @@ const StudentHome = () => {
         <div className="panel">
           <h3>Today’s Schedule</h3>
           <ul>
-            <li>09:00 – 10:00: DBMS</li>
-            <li>11:00 – 12:00: DSA</li>
+            <li>09:00 – 10:00: Club Meeting</li>
+            <li>11:00 – 12:00: Project Review</li>
+            <li>1:00 – 2:00: Sport</li>
           </ul>
         </div>
         <div className="panel">
@@ -195,6 +234,7 @@ const StudentHome = () => {
   );
 };
 
+// Parent dashboard with sidebar + nested routes
 const StudentDashboard = () => {
   return (
     <div className="layout">
@@ -203,11 +243,11 @@ const StudentDashboard = () => {
         <Header title="Student Dashboard" />
         <Routes>
           <Route path="/" element={<StudentHome />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/events" element={<UpcomingEvents />} />
-          <Route path="/progress" element={<ProgressPage />} />
-          <Route path="/certificates" element={<CertificatesPage />} />
-          <Route path="/profile" element={<StudentProfile />} />
+          <Route path="schedule" element={<Schedule />} />
+          <Route path="events" element={<UpcomingEvents />} />
+          <Route path="progress" element={<ProgressPage />} />
+          <Route path="certificates" element={<CertificatesPage />} />
+          <Route path="profile" element={<StudentProfile />} />
         </Routes>
       </div>
     </div>

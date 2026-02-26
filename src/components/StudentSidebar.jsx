@@ -6,7 +6,7 @@ import "../styles/Sidebar.css";
 const StudentSidebar = () => {
   return (
     <aside className="sidebar">
-      <div className="sidebar-logo">SRMS Student</div>
+      <div className="sidebar-logo">Student Dashboard</div>
       <nav className="sidebar-nav">
         <NavLink to="/student" end className="sidebar-link">
           Dashboard
@@ -23,7 +23,7 @@ const StudentSidebar = () => {
         <NavLink to="/student/certificates" className="sidebar-link">
           Certificates
         </NavLink>
-        <NavLink to="/profile" className="sidebar-link">
+        <NavLink to="/student/profile" className="sidebar-link">
           Profile
         </NavLink>
       </nav>

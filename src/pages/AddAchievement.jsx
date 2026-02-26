@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "../styles/Forms.css";
+import { AchievementContext } from "../context/AchievementContext";
 
 const AddAchievement = () => {
+  const { addAchievement } = useContext(AchievementContext);
   const [form, setForm] = useState({
     title: "",
+    eventName: "",
     category: "",
     level: "",
     date: "",
@@ -16,7 +19,16 @@ const AddAchievement = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Achievement submitted (dummy).");
+    addAchievement(form);
+    alert("Achievement submitted (stored in list).");
+    setForm({
+      title: "",
+      eventName: "",
+      category: "",
+      level: "",
+      date: "",
+      description: ""
+    });
   };
 
   return (
@@ -34,6 +46,16 @@ const AddAchievement = () => {
             />
           </label>
           <label>
+            Event Name
+            <input
+              name="eventName"
+              value={form.eventName}
+              onChange={handleChange}
+            />
+          </label>
+        </div>
+        <div className="form-row">
+          <label>
             Category
             <select
               name="category"
@@ -47,8 +69,6 @@ const AddAchievement = () => {
               <option value="Sports">Sports</option>
             </select>
           </label>
-        </div>
-        <div className="form-row">
           <label>
             Level
             <select
@@ -64,6 +84,8 @@ const AddAchievement = () => {
               <option value="International">International</option>
             </select>
           </label>
+        </div>
+        <div className="form-row">
           <label>
             Date
             <input

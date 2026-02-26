@@ -1,9 +1,10 @@
+// src/pages/AddStudents.jsx
 import React, { useState } from "react";
 import "../styles/Forms.css";
 
 const initialStudents = [
   { id: 1, name: "Raj", regNo: "2400030001", department: "CSE", year: "2" },
-  { id: 2, name: "Kiran", regNo: "2400030002", department: "CSE", year: "2" }
+  { id: 2, name: "Kiran", regNo: "2400030002", department: "ECE", year: "2" }
 ];
 
 const AddStudents = () => {

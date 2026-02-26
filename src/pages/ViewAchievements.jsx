@@ -5,7 +5,7 @@ import AchievementCard from "../components/AchievementCard";
 import { AchievementContext } from "../context/AchievementContext";
 
 const ViewAchievements = () => {
-  const { achievements } = useContext(AchievementContext);
+  const { achievements, updateAchievementStatus } = useContext(AchievementContext);
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
   const [search, setSearch] = useState("");
@@ -29,6 +29,14 @@ const ViewAchievements = () => {
         .includes(search.toLowerCase());
     return catOk && statusOk && searchOk;
   });
+
+  const handleApprove = (id) => {
+    updateAchievementStatus(id, "Approved");
+  };
+
+  const handleReject = (id) => {
+    updateAchievementStatus(id, "Rejected");
+  };
 
   return (
     <div className="page-container">
@@ -57,6 +65,7 @@ const ViewAchievements = () => {
             <option value="All">All Status</option>
             <option value="Approved">Approved</option>
             <option value="Pending">Pending</option>
+            <option value="Rejected">Rejected</option>
           </select>
         </div>
       </div>
@@ -81,7 +90,13 @@ const ViewAchievements = () => {
           <p style={{ marginTop: "1rem" }}>No achievements found.</p>
         ) : (
           filtered.map((a) => (
-            <AchievementCard key={a.id} achievement={a} />
+            <AchievementCard
+              key={a.id}
+              achievement={a}
+              showActions
+              onApprove={() => handleApprove(a.id)}
+              onReject={() => handleReject(a.id)}
+            />
           ))
         )}
       </div>

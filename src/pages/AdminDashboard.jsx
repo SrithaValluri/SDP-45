@@ -10,6 +10,7 @@ import ViewAchievements from "./ViewAchievements";
 import GenerateReports from "./GenerateReports";
 import StudentProfile from "./StudentProfile";
 import AddStudents from "./AddStudents";
+import AddAchievement from "./AddAchievement";
 
 const AdminHome = () => {
   return (
@@ -97,6 +98,7 @@ const AdminDashboard = () => {
         <Routes>
           <Route path="/" element={<AdminHome />} />
           <Route path="add-students" element={<AddStudents />} />
+          <Route path="add-achievement" element={<AddAchievement />} />
           <Route path="manage-participation" element={<ManageParticipation />} />
           <Route path="view-achievements" element={<ViewAchievements />} />
           <Route path="reports" element={<GenerateReports />} />

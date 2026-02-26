@@ -2,7 +2,12 @@
 import React, { useState } from "react";
 import "../styles/Forms.css";
 
-const AchievementCard = ({ achievement }) => {
+const AchievementCard = ({
+  achievement,
+  onApprove,
+  onReject,
+  showActions
+}) => {
   const {
     title,
     eventName,
@@ -11,7 +16,10 @@ const AchievementCard = ({ achievement }) => {
     date,
     status,
     description,
-    certificateUrl
+    certificateUrl,
+    studentId,
+    studentName,
+    studentEmail
   } = achievement;
 
   const [showDetails, setShowDetails] = useState(false);
@@ -30,6 +38,22 @@ const AchievementCard = ({ achievement }) => {
     <div className={`achievement-card ${bgClass}`}>
       <div className="ac-header">
         <div>
+          {studentId && (
+            <div className="ac-student-info">
+              <p>
+                <strong>Student:</strong> {studentName || "N/A"}
+              </p>
+              <p>
+                <strong>ID:</strong> {studentId}
+              </p>
+              {studentEmail && (
+                <p>
+                  <strong>Email:</strong> {studentEmail}
+                </p>
+              )}
+            </div>
+          )}
+
           <h3 className="ac-title">{title}</h3>
           {eventName && <p className="ac-event">{eventName}</p>}
           <div className="ac-tags">
@@ -77,6 +101,30 @@ const AchievementCard = ({ achievement }) => {
             </a>
           </>
         )}
+
+        {showActions && (
+          <>
+            {status !== "Approved" && (
+              <button
+                type="button"
+                className="secondary-btn"
+                onClick={onApprove}
+              >
+                Approve
+              </button>
+            )}
+            {status !== "Rejected" && (
+              <button
+                type="button"
+                className="secondary-btn"
+                onClick={onReject}
+              >
+                Reject
+              </button>
+            )}
+          </>
+        )}
+
         <button
           type="button"
           className="secondary-btn"

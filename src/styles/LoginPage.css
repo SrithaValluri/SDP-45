@@ -52,3 +52,98 @@
   text-align: center;
   color: #6b7280;
 }
+/* Title used in the new login pages */
+.login-title {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Captcha styling */
+.captcha-section {
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.captcha-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.captcha-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.captcha-refresh-btn {
+  border: none;
+  background: #eef3ff;
+  color: #1d4ed8;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.captcha-refresh-btn:hover {
+  background: #e0e7ff;
+}
+
+.captcha-display {
+  letter-spacing: 4px;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: #f3f4ff;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  user-select: none;
+}
+
+.captcha-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  outline: none;
+}
+
+.captcha-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px #2563eb20;
+}
+
+/* Submit button spacing */
+.login-submit-btn {
+  margin-top: 1rem;
+}
+
+/* Error text */
+.error-text {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #dc2626;
+}
+
+/* Links between student/admin login */
+.login-footer-links {
+  margin-top: 1.25rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.login-link {
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}

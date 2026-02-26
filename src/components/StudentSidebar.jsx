@@ -26,6 +26,12 @@ const StudentSidebar = () => {
         <NavLink to="/student/profile" className="sidebar-link">
           Profile
         </NavLink>
+        <NavLink to="/student/achievements" className="sidebar-link">
+          Achievements
+        </NavLink>
+        <NavLink to="/student/participation" className="sidebar-link">
+          Participation
+        </NavLink>
       </nav>
     </aside>
   );

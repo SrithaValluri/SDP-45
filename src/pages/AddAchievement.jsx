@@ -1,10 +1,13 @@
+// src/pages/AddAchievement.jsx  (ADMIN)
 import React, { useState, useContext } from "react";
 import "../styles/Forms.css";
 import { AchievementContext } from "../context/AchievementContext";
 
 const AddAchievement = () => {
-  const { addAchievement } = useContext(AchievementContext);
+  const { addAchievementForStudent } = useContext(AchievementContext);
   const [form, setForm] = useState({
+    studentId: "",
+    studentName: "",
     title: "",
     eventName: "",
     category: "",
@@ -19,9 +22,19 @@ const AddAchievement = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addAchievement(form);
-    alert("Achievement submitted (stored in list).");
+
+    if (!form.studentId || !form.studentName) {
+      alert("Please enter student ID and name before submitting.");
+      return;
+    }
+
+    addAchievementForStudent(form);
+    alert("Achievement created for student.");
+
     setForm({
+      studentId: "",
+      studentName: "",
+      studentEmail: "", 
       title: "",
       eventName: "",
       category: "",
@@ -33,8 +46,33 @@ const AddAchievement = () => {
 
   return (
     <div className="page-container">
-      <h2>Add Achievement</h2>
+      <h2>Add Achievement (Admin)</h2>
       <form className="form" onSubmit={handleSubmit}>
+        {/* Student details first */}
+        <div className="form-row">
+          <label>
+            Student Reg No / ID
+            <input
+              name="studentId"
+              value={form.studentId}
+              onChange={handleChange}
+              placeholder="Enter student registration number"
+              required
+            />
+          </label>
+          <label>
+            Student Name
+            <input
+              name="studentName"
+              value={form.studentName}
+              onChange={handleChange}
+              placeholder="Enter student full name"
+              required
+            />
+          </label>
+        </div>
+
+        {/* Achievement details */}
         <div className="form-row">
           <label>
             Title
@@ -107,7 +145,7 @@ const AddAchievement = () => {
           />
         </label>
         <button type="submit" className="primary-btn">
-          Submit
+          Create Achievement
         </button>
       </form>
     </div>

@@ -1,17 +1,23 @@
 // src/App.jsx
 import React, { useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
+import AdminLoginPage from "./pages/AdminLoginPage";
+import StudentLoginPage from "./pages/StudentLoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 import NotFound from "./pages/NotFound";
 import { AuthContext } from "./context/AuthContext";
 
 const PrivateRoute = ({ children, role }) => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
+
+  if (loading) {
+    // while checking localStorage, render nothing
+    return <div />;
+  }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login/student" replace />;
   }
   if (role && user.role !== role) {
     return <Navigate to="/" replace />;
@@ -20,7 +26,12 @@ const PrivateRoute = ({ children, role }) => {
 };
 
 const App = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
+
+  if (loading) {
+    // avoid redirecting from "/" before we know the user
+    return <div />;
+  }
 
   return (
     <Routes>
@@ -34,12 +45,14 @@ const App = () => {
               <Navigate to="/student" replace />
             )
           ) : (
-            <Navigate to="/login" replace />
+            <Navigate to="/login/student" replace />
           )
         }
       />
 
-      <Route path="/login" element={<LoginPage />} />
+      {/* Separate login pages */}
+      <Route path="/login/admin" element={<AdminLoginPage />} />
+      <Route path="/login/student" element={<StudentLoginPage />} />
 
       {/* Admin layout with sidebar */}
       <Route

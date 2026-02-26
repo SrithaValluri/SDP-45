@@ -1,12 +1,14 @@
 // src/pages/StudentDashboard.jsx
 import React, { useContext } from "react";
 import { Routes, Route } from "react-router-dom";
+import StudentAchievements from "./StudentAchievements";
 import "../styles/StudentDashboard.css";
 import "../styles/Forms.css";
 import StudentSidebar from "../components/StudentSidebar";
 import Header from "../components/Header";
 import StudentProfile from "./StudentProfile";
 import { AchievementContext } from "../context/AchievementContext";
+import StudentParticipation from "./StudentParticipation";
 
 // Schedule page
 const Schedule = () => (
@@ -141,7 +143,6 @@ const CertificatesPage = () => {
             <th>Category</th>
             <th>Date</th>
             <th>View</th>
-            <th>Download</th>
           </tr>
         </thead>
         <tbody>
@@ -165,17 +166,7 @@ const CertificatesPage = () => {
                 )}
               </td>
               <td>
-                {a.certificateUrl ? (
-                  <a
-                    href={a.certificateUrl}
-                    download
-                    className="primary-btn"
-                  >
-                    Download
-                  </a>
-                ) : (
-                  "-"
-                )}
+                
               </td>
             </tr>
           ))}
@@ -219,7 +210,7 @@ const StudentHome = () => {
           <ul>
             <li>09:00 – 10:00: Club Meeting</li>
             <li>11:00 – 12:00: Project Review</li>
-            <li>1:00 – 2:00: Sport</li>
+            <li>1:00 – 2:00: Sports</li>
           </ul>
         </div>
         <div className="panel">
@@ -247,7 +238,9 @@ const StudentDashboard = () => {
           <Route path="events" element={<UpcomingEvents />} />
           <Route path="progress" element={<ProgressPage />} />
           <Route path="certificates" element={<CertificatesPage />} />
+          <Route path="achievements" element={<StudentAchievements />} />
           <Route path="profile" element={<StudentProfile />} />
+          <Route path="participation" element={<StudentParticipation />} />
         </Routes>
       </div>
     </div>

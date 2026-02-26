@@ -18,15 +18,15 @@ const AdminHome = () => {
       <div className="stats-grid">
         <div className="stat-card">
           <h3>Total Students</h3>
-          <p>120</p>
+          <p>1200</p>
         </div>
         <div className="stat-card">
           <h3>Certificates Issued</h3>
-          <p>60</p>
+          <p>618</p>
         </div>
         <div className="stat-card">
           <h3>Pending Approvals</h3>
-          <p>8</p>
+          <p>80</p>
         </div>
       </div>
 

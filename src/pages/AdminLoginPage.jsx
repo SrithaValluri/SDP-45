@@ -35,7 +35,21 @@ const AdminLoginPage = () => {
   };
 
   return (
-    <div className="login-page">
+    <div className="login-page split-layout">
+      <div className="login-hero">
+        <div className="login-hero-inner">
+          <div className="login-hero-icon">🏆</div>
+          <h1 className="login-hero-title">
+            Student Achievement
+            <br />
+            Management System
+          </h1>
+          <p className="login-hero-subtitle">
+            Admin portal for managing student records and approvals.
+          </p>
+        </div>
+      </div>
+
       <div className="login-card">
         <h2 className="login-title">Admin Login</h2>
 
@@ -61,7 +75,6 @@ const AdminLoginPage = () => {
             />
           </label>
 
-          {/* Captcha block */}
           <div className="captcha-section">
             <div className="captcha-header">
               <span className="captcha-label">Captcha</span>
@@ -91,7 +104,7 @@ const AdminLoginPage = () => {
         </form>
 
         <div className="login-footer-links">
-          <span>Are you a student? </span>
+          <span>Are you a student?</span>
           <Link to="/login/student" className="login-link">
             Login as Student
           </Link>

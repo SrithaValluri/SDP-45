@@ -1,57 +1,48 @@
-import React, { useState, useContext } from "react";
+// src/pages/LoginPage.jsx
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/LoginPage.css";
-import { AuthContext } from "../context/AuthContext";
 
 const LoginPage = () => {
-  const [form, setForm] = useState({ username: "", password: "" });
-  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    login(form);
-    if (form.username === "admin") {
-      navigate("/admin");
-    } else {
-      navigate("/student");
-    }
-  };
-
   return (
-    <div className="login-page">
-      <div className="login-card">
-        <h2>Student Achievement Platform</h2>
-        <form onSubmit={handleSubmit} className="login-form">
-          <label>
-            Username
-            <input
-              name="username"
-              value={form.username}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <label>
-            Password
-            <input
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <button type="submit" className="primary-btn">
-            Login
+    <div className="login-shell">
+      <header className="login-header">
+        <div className="login-header-left">
+          <div className="login-logo-circle">SA</div>
+          <div>
+            <h1 className="login-app-title">Student Achievement Portal</h1>
+            <p className="login-app-subtitle">
+              Choose how you want to sign in.
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <main className="login-main role-select-main">
+        <div className="role-card">
+          <h2>Login as Student</h2>
+          <p>Access your personal achievement dashboard.</p>
+          <button
+            className="primary-btn"
+            onClick={() => navigate("/login/student")}
+          >
+            Continue as Student
           </button>
-        </form>
-        <p className="login-hint">Use username "admin" for admin view.</p>
-      </div>
+        </div>
+
+        <div className="role-card">
+          <h2>Login as Admin</h2>
+          <p>Verify and manage student achievements.</p>
+          <button
+            className="secondary-btn"
+            onClick={() => navigate("/login/admin")}
+          >
+            Continue as Admin
+          </button>
+        </div>
+      </main>
     </div>
   );
 };

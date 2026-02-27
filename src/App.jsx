@@ -5,6 +5,7 @@ import AdminLoginPage from "./pages/AdminLoginPage";
 import StudentLoginPage from "./pages/StudentLoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
+import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 import { AuthContext } from "./context/AuthContext";
 
@@ -53,6 +54,7 @@ const App = () => {
       {/* Separate login pages */}
       <Route path="/login/admin" element={<AdminLoginPage />} />
       <Route path="/login/student" element={<StudentLoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
 
       {/* Admin layout with sidebar */}
       <Route

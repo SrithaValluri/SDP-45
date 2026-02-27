@@ -30,7 +30,26 @@ const StudentLoginPage = () => {
   };
 
   return (
-    <div className="login-page">
+    <div className="login-page split-layout">
+      {/* Left side: logo + title */}
+      <div className="login-hero">
+        <div className="login-hero-inner">
+          <div className="login-hero-icon">
+            {/* simple trophy icon using emoji or you can replace with img */}
+            🏆
+          </div>
+          <h1 className="login-hero-title">
+            Student Achievement
+            <br />
+            Management System
+          </h1>
+          <p className="login-hero-subtitle">
+            Track academic, co‑curricular and sports achievements in one place.
+          </p>
+        </div>
+      </div>
+
+      {/* Right side: card */}
       <div className="login-card">
         <h2 className="login-title">Student Login</h2>
 
@@ -56,7 +75,6 @@ const StudentLoginPage = () => {
             />
           </label>
 
-          {/* Captcha block */}
           <div className="captcha-section">
             <div className="captcha-header">
               <span className="captcha-label">Captcha</span>
@@ -68,9 +86,7 @@ const StudentLoginPage = () => {
                 Refresh
               </button>
             </div>
-            <div className="captcha-display">
-              {captcha}
-            </div>
+            <div className="captcha-display">{captcha}</div>
             <input
               className="captcha-input"
               placeholder="Enter the text shown above"
@@ -88,7 +104,7 @@ const StudentLoginPage = () => {
         </form>
 
         <div className="login-footer-links">
-          <span>Are you an admin? </span>
+          <span>Are you an admin?</span>
           <Link to="/login/admin" className="login-link">
             Login as Admin
           </Link>

@@ -39,8 +39,7 @@ const StudentAchievements = () => {
           <div className="empty-state">
             <h3>No achievements added yet</h3>
             <p>
-              Your faculty/admin can add achievements for you from the admin
-              dashboard.
+              Your achievements will appear here once your admin/faculty adds them. 
             </p>
           </div>
         ) : (

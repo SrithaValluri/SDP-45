@@ -15,28 +15,30 @@ export const AuthProvider = ({ children }) => {
     setLoading(false); // finished checking
   }, []);
 
-  const login = ({ username, password }) => {
-    const role = username === "admin" ? "admin" : "student";
+  const login = async ({ username, password }) => {
+    try {
+      const response = await fetch("http://localhost:2026/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
 
-    if (role === "admin") {
-      const newUser = {
-        id: 1,
-        name: "Admin",
-        role: "admin",
-        username: "admin"
-      };
+      if (!response.ok) {
+        throw new Error("Invalid credentials");
+      }
+
+      const data = await response.json();
+      // data contains { token: "...", user: { id: ..., username: ..., role: ... } }
+      const newUser = data.user;
+      
       setUser(newUser);
       localStorage.setItem("sap_user", JSON.stringify(newUser));
-    } else {
-      const newUser = {
-        id: Date.now(),
-        name: username,
-        role: "student",
-        regNo: username,
-        username
-      };
-      setUser(newUser);
-      localStorage.setItem("sap_user", JSON.stringify(newUser));
+      localStorage.setItem("sap_token", data.token);
+
+      return { success: true };
+    } catch (error) {
+      console.error("Login Error:", error);
+      return { success: false, error: error.message };
     }
   };
 

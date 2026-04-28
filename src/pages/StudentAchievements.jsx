@@ -6,10 +6,10 @@ import { AuthContext } from "../context/AuthContext";
 import AchievementCard from "../components/AchievementCard";
 
 const StudentAchievements = () => {
-  const { achievements } = useContext(AchievementContext);
   const { user } = useContext(AuthContext);
+  const { achievements, loading } = useContext(AchievementContext);
 
-  const studentId = user?.regNo || user?.id || user?.username; 
+  const studentId = user?.username || user?.regNo; 
 
   const myAchievements = useMemo(
     () =>

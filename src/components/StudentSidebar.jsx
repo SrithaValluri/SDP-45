@@ -11,8 +11,11 @@ const StudentSidebar = () => {
         <NavLink to="/student" end className="sidebar-link">
           Dashboard
         </NavLink>
-        <NavLink to="/student/schedule" className="sidebar-link">
-          Schedule
+        <NavLink to="/student/request-achievement" className="sidebar-link">
+          Request Approval
+        </NavLink>
+        <NavLink to="/student/achievements" className="sidebar-link">
+          My Achievements
         </NavLink>
         <NavLink to="/student/events" className="sidebar-link">
           Upcoming Events

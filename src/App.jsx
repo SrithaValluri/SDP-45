@@ -1,6 +1,6 @@
 // src/App.jsx
 import React, { useContext } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import StudentLoginPage from "./pages/StudentLoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -13,7 +13,6 @@ const PrivateRoute = ({ children, role }) => {
   const { user, loading } = useContext(AuthContext);
 
   if (loading) {
-    // while checking localStorage, render nothing
     return <div />;
   }
 
@@ -35,50 +34,52 @@ const App = () => {
   }
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          user ? (
-            user.role === "admin" ? (
-              <Navigate to="/admin" replace />
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            user ? (
+              user.role === "ADMIN" ? (
+                <Navigate to="/admin" replace />
+              ) : (
+                <Navigate to="/student" replace />
+              )
             ) : (
-              <Navigate to="/student" replace />
+              <Navigate to="/login/student" replace />
             )
-          ) : (
-            <Navigate to="/login/student" replace />
-          )
-        }
-      />
+          }
+        />
 
-      {/* Separate login pages */}
-      <Route path="/login/admin" element={<AdminLoginPage />} />
-      <Route path="/login/student" element={<StudentLoginPage />} />
-      <Route path="/login" element={<LoginPage />} />
+        {/* Separate login pages */}
+        <Route path="/login/admin" element={<AdminLoginPage />} />
+        <Route path="/login/student" element={<StudentLoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
-      {/* Admin layout with sidebar */}
-      <Route
-        path="/admin/*"
-        element={
-          <PrivateRoute role="admin">
-            <AdminDashboard />
-          </PrivateRoute>
-        }
-      />
+        {/* Admin layout with sidebar */}
+        <Route
+          path="/admin/*"
+          element={
+            <PrivateRoute role="ADMIN">
+              <AdminDashboard />
+            </PrivateRoute>
+          }
+        />
 
-      {/* Student layout with sidebar */}
-      <Route
-        path="/student/*"
-        element={
-          <PrivateRoute role="student">
-            <StudentDashboard />
-          </PrivateRoute>
-        }
-      />
+        {/* Student layout with sidebar */}
+        <Route
+          path="/student/*"
+          element={
+            <PrivateRoute role="STUDENT">
+              <StudentDashboard />
+            </PrivateRoute>
+          }
+        />
 
-      {/* 404 */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+        {/* 404 */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 

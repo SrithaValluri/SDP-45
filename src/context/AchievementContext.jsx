@@ -1,63 +1,121 @@
-// src/context/AchievementContext.jsx
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 export const AchievementContext = createContext();
 
-const initialAchievements = [
-  {
-    id: 1,
-    studentId: "2400030001",
-    studentName: "Siva",
-    title: "Smart India Hackathon",
-    eventName: "Smart India Hackathon 2025",
-    category: "Academic",
-    level: "National",
-    date: "2025-10-10",
-    status: "Approved",
-    description: "Won first prize in national-level hackathon.",
-    certificateUrl:
-      "https://static.vecteezy.com/system/resources/thumbnails/002/349/754/small/modern-elegant-certificate-template-free-vector.jpg"
-  },
-  {
-    id: 2,
-    studentId: "2400030002",
-    studentName: "Ananya",
-    title: "Inter-college Football",
-    eventName: "Inter-college Sports Meet",
-    category: "Sports",
-    level: "College",
-    date: "2025-08-05",
-    status: "Approved",
-    description: "Gold medal in inter-college football tournament.",
-    certificateUrl:
-      "https://static.vecteezy.com/system/resources/thumbnails/002/349/754/small/modern-elegant-certificate-template-free-vector.jpg"
-  }
-];
-
 export const AchievementProvider = ({ children }) => {
-  const [achievements, setAchievements] = useState(initialAchievements);
+  const { user } = useContext(AuthContext);
+  const [achievements, setAchievements] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Admin adds achievement for a student (starts as Pending)
-  const addAchievementForStudent = (data) => {
-    const newAchievement = {
-      id: achievements.length + 1,
-      status: "Pending",
-      certificateUrl: "",
-      ...data
-    };
-    setAchievements((prev) => [...prev, newAchievement]);
+  const fetchAchievements = async () => {
+    try {
+      const token = localStorage.getItem("sap_token");
+      const response = await fetch("http://localhost:2026/api/achievements", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data)
+        setAchievements(data);
+      }
+    } catch (err) {
+      console.error("Error fetching achievements:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Admin approves / rejects
-  const updateAchievementStatus = (id, status) => {
-    setAchievements((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, status } : a))
-    );
+  useEffect(() => {
+    if (user) {
+      fetchAchievements();
+    } else {
+      setAchievements([]);
+      setLoading(false);
+    }
+  }, [user]);
+
+  const addAchievementForStudent = async (achievementData) => {
+    try {
+      const token = localStorage.getItem("sap_token");
+      const response = await fetch("http://localhost:2026/api/achievements", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ ...achievementData, status: "Pending" })
+      });
+      if (response.ok) {
+        const newAchievement = await response.json();
+        setAchievements((prev) => [...prev, newAchievement]);
+        return { success: true };
+      } else {
+        const errorText = await response.text();
+        console.error("Add achievement failed:", errorText);
+        return { success: false };
+      }
+    } catch (err) {
+      console.error("Error adding achievement:", err);
+      return { success: false };
+    }
+  };
+
+  const updateAchievementStatus = async (id, status) => {
+    try {
+      const token = localStorage.getItem("sap_token");
+      const url = `http://localhost:2026/api/achievements/${id}/status?status=${status}`;
+      console.log(`Calling PUT ${url}`);
+      
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        fetchAchievements();
+        alert(`Achievement ${status.toLowerCase()} successfully!`);
+      } else {
+        const msg = await response.text();
+        console.error("Update status failed:", response.status, msg);
+        alert(`Failed to update status: ${response.status} ${msg || "Forbidden"}`);
+      }
+    } catch (err) {
+      console.error("Error updating status:", err);
+      alert("Error connecting to server.");
+    }
+  };
+
+  const deleteAchievement = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this achievement?")) return;
+    try {
+      const token = localStorage.getItem("sap_token");
+      const response = await fetch(`http://localhost:2026/api/achievements/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        setAchievements((prev) => prev.filter((a) => a.id !== id));
+        alert("Achievement deleted successfully!");
+      } else {
+        const msg = await response.text();
+        console.error("Delete failed:", response.status, msg);
+        alert(`Failed to delete: ${response.status} ${msg || "Forbidden"}`);
+      }
+    } catch (err) {
+      console.error("Error deleting achievement:", err);
+      alert("Error connecting to server.");
+    }
   };
 
   return (
     <AchievementContext.Provider
-      value={{ achievements, addAchievementForStudent, updateAchievementStatus }}
+      value={{ achievements, loading, addAchievementForStudent, updateAchievementStatus, deleteAchievement }}
     >
       {children}
     </AchievementContext.Provider>

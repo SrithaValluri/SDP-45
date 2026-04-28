@@ -7,6 +7,7 @@ import { useSimpleCaptcha } from "../hooks/useSimpleCaptcha";
 
 const StudentLoginPage = () => {
   const [form, setForm] = useState({ username: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const { captcha, input, setInput, regenerate, isValid } = useSimpleCaptcha();
@@ -16,7 +17,7 @@ const StudentLoginPage = () => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isValid()) {
@@ -25,8 +26,13 @@ const StudentLoginPage = () => {
       return;
     }
 
-    login(form);
-    navigate("/student");
+    const { success, error: loginError } = await login(form);
+    
+    if (success) {
+      navigate("/student");
+    } else {
+      setError(loginError || "Login failed");
+    }
   };
 
   return (
@@ -66,13 +72,23 @@ const StudentLoginPage = () => {
 
           <label>
             Password
-            <input
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
+            <div className="password-wrapper">
+              <input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={form.password}
+                onChange={handleChange}
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? "👁️‍🗨️" : "👁️"}
+              </button>
+            </div>
           </label>
 
           <div className="captcha-section">

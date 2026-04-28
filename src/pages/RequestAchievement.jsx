@@ -1,14 +1,17 @@
-// src/pages/AddAchievement.jsx
+// src/pages/RequestAchievement.jsx
 import React, { useState, useContext } from "react";
 import "../styles/Forms.css";
+import { AuthContext } from "../context/AuthContext";
 import { AchievementContext } from "../context/AchievementContext";
 
-const AddAchievement = () => {
+const RequestAchievement = () => {
+  const { user } = useContext(AuthContext);
   const { addAchievementForStudent } = useContext(AchievementContext);
   const [loading, setLoading] = useState(false);
+
   const [form, setForm] = useState({
-    studentId: "",
-    studentName: "",
+    studentId: user?.username || "",
+    studentName: user?.name || "",
     title: "",
     eventName: "",
     category: "Technical",
@@ -63,10 +66,9 @@ const AddAchievement = () => {
     }
     const result = await addAchievementForStudent(form);
     if (result.success) {
-      alert("Achievement added successfully!");
+      alert("Achievement request submitted! Waiting for Admin approval.");
       setForm({
-        studentId: "",
-        studentName: "",
+        ...form,
         title: "",
         eventName: "",
         category: "Technical",
@@ -76,36 +78,24 @@ const AddAchievement = () => {
         certificateUrl: ""
       });
     } else {
-      alert("Failed to add achievement.");
+      alert("Failed to submit request.");
     }
   };
 
   return (
     <div className="page-container">
-      <h2>Add New Achievement</h2>
-      <p className="page-subtitle">Record a student's milestone or award.</p>
-
-      <form className="form" onSubmit={handleSubmit} style={{ marginTop: "1rem" }}>
+      <h2>Request Achievement Approval</h2>
+      <p className="page-subtitle">Submit your achievements to have them verified and added to your profile.</p>
+      
+      <form className="form" onSubmit={handleSubmit} style={{ marginTop: "1.5rem" }}>
         <div className="form-row">
           <label>
-            Student Reg No
-            <input
-              name="studentId"
-              value={form.studentId}
-              onChange={handleChange}
-              placeholder="e.g. 2100030001"
-              required
-            />
+            Registration Number
+            <input name="studentId" value={form.studentId} disabled className="disabled-input" />
           </label>
           <label>
             Student Name
-            <input
-              name="studentName"
-              value={form.studentName}
-              onChange={handleChange}
-              placeholder="e.g. John Doe"
-              required
-            />
+            <input name="studentName" value={form.studentName} disabled className="disabled-input" />
           </label>
         </div>
 
@@ -116,7 +106,7 @@ const AddAchievement = () => {
               name="title"
               value={form.title}
               onChange={handleChange}
-              placeholder="e.g. 1st Place - Coding Contest"
+              placeholder="e.g. 1st Place in Hackathon"
               required
             />
           </label>
@@ -126,7 +116,7 @@ const AddAchievement = () => {
               name="eventName"
               value={form.eventName}
               onChange={handleChange}
-              placeholder="e.g. Annual Tech Fest"
+              placeholder="e.g. Annual Tech Fest 2025"
               required
             />
           </label>
@@ -156,7 +146,7 @@ const AddAchievement = () => {
 
         <div className="form-row">
           <label>
-            Date
+            Date of Achievement
             <input
               type="date"
               name="date"
@@ -190,15 +180,16 @@ const AddAchievement = () => {
             rows="4"
             value={form.description}
             onChange={handleChange}
+            placeholder="Tell us more about your achievement..."
           />
         </label>
 
         <button type="submit" className="primary-btn" disabled={loading}>
-          {loading ? "Uploading Photo..." : "Save Achievement"}
+          {loading ? "Uploading Photo..." : "Submit for Approval"}
         </button>
       </form>
     </div>
   );
 };
 
-export default AddAchievement;
+export default RequestAchievement;

@@ -1,5 +1,5 @@
-// src/pages/StudentDashboard.jsx
-import React, { useContext } from "react";
+// src/pages/StudentDashboard.jsx (Updated with Viewer Modal)
+import React, { useContext, useMemo, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import StudentAchievements from "./StudentAchievements";
 import "../styles/StudentDashboard.css";
@@ -8,7 +8,60 @@ import StudentSidebar from "../components/StudentSidebar";
 import Header from "../components/Header";
 import StudentProfile from "./StudentProfile";
 import { AchievementContext } from "../context/AchievementContext";
+import { AuthContext } from "../context/AuthContext";
 import StudentParticipation from "./StudentParticipation";
+import RequestAchievement from "./RequestAchievement";
+
+// Certificate Viewer Modal
+const CertificateModal = ({ isOpen, onClose, achievement }) => {
+  if (!isOpen || !achievement) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content certificate-viewer" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}>&times;</button>
+        <div className="certificate-header">
+          <h3>Certificate Viewer</h3>
+          <p>{achievement.title}</p>
+        </div>
+        <div className="certificate-body" style={{ width: "100%", height: "400px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+          {achievement.certificateUrl ? (
+            achievement.certificateUrl.toLowerCase().endsWith(".pdf") ? (
+              <iframe 
+                src={achievement.certificateUrl} 
+                title="Certificate PDF"
+                style={{ width: "100%", height: "100%", border: "none" }}
+              />
+            ) : (
+              <img 
+                src={achievement.certificateUrl} 
+                alt="Certificate" 
+                className="certificate-image-preview" 
+                onError={(e) => { e.target.src = "https://placehold.co/600x400?text=Certificate+Preview+Unavailable"; }}
+              />
+            )
+          ) : (
+            <div className="no-certificate-placeholder">
+              <p>No certificate image available.</p>
+            </div>
+          )}
+        </div>
+        <div className="certificate-footer">
+          <a 
+            href={achievement.certificateUrl} 
+            download={`${achievement.title}_certificate`}
+            target="_blank" 
+            rel="noreferrer" 
+            className="primary-btn download-btn"
+          >
+            Download Certificate
+          </a>
+          <button onClick={onClose} className="secondary-btn">Close</button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // Schedule page
 const Schedule = () => (
@@ -115,14 +168,13 @@ const ProgressPage = () => (
       <div className="card">
         <h3>This Semester</h3>
         <p className="card-body">
-          4 achievements added, 3 approved, 1 pending approval.
+          Track your personal goals and academic performance here.
         </p>
       </div>
       <div className="card">
         <h3>Goals</h3>
         <p className="card-body">
-          Target: 2 more academic achievements and 1 project certificate before
-          end of semester.
+          Target: Add at least 3 high-level achievements this semester.
         </p>
       </div>
     </div>
@@ -131,58 +183,95 @@ const ProgressPage = () => (
 
 // Certificates page (uses context)
 const CertificatesPage = () => {
+  const { user } = useContext(AuthContext);
   const { achievements } = useContext(AchievementContext);
+  const [selectedAchievement, setSelectedAchievement] = useState(null);
+  const studentId = user?.username || user?.regNo;
+
+  const myAchievements = useMemo(() => {
+    return achievements.filter(a => String(a.studentId) === String(studentId));
+  }, [achievements, studentId]);
 
   return (
     <div className="page-container">
-      <h2>Certificates</h2>
-      <table className="table">
+      <h2>My Certificates</h2>
+      <p className="page-subtitle">List of certificates from your achievements.</p>
+      <table className="table" style={{ marginTop: "1rem" }}>
         <thead>
           <tr>
             <th>Title</th>
             <th>Category</th>
             <th>Date</th>
             <th>View</th>
+            <th>Download</th>
           </tr>
         </thead>
         <tbody>
-          {achievements.map((a) => (
-            <tr key={a.id}>
-              <td>{a.title}</td>
-              <td>{a.category}</td>
-              <td>{a.date}</td>
-              <td>
-                {a.certificateUrl ? (
-                  <a
-                    href={a.certificateUrl}
-                    target="_blank"
-                    rel="noreferrer"
+          {myAchievements.length === 0 ? (
+            <tr>
+              <td colSpan="5" style={{ textAlign: "center" }}>No certificates found.</td>
+            </tr>
+          ) : (
+            myAchievements.map((a) => (
+              <tr key={a.id}>
+                <td>{a.title}</td>
+                <td>{a.category}</td>
+                <td>{a.date}</td>
+                <td>
+                  <button 
+                    onClick={() => setSelectedAchievement(a)} 
                     className="primary-btn"
+                    style={{ padding: "4px 12px", fontSize: "0.8rem", width: "auto" }}
                   >
                     View
-                  </a>
-                ) : (
-                  "-"
-                )}
-              </td>
-              <td>
-                
-              </td>
-            </tr>
-          ))}
+                  </button>
+                </td>
+                <td>
+                  {a.certificateUrl ? (
+                    <a
+                      href={a.certificateUrl}
+                      download={`${a.title}_certificate`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="secondary-btn"
+                      style={{ padding: "4px 12px", fontSize: "0.8rem", width: "auto", textDecoration: "none" }}
+                    >
+                      Download
+                    </a>
+                  ) : (
+                    "-"
+                  )}
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
+      
+      <CertificateModal 
+        isOpen={!!selectedAchievement} 
+        onClose={() => setSelectedAchievement(null)} 
+        achievement={selectedAchievement}
+      />
     </div>
   );
 };
 
 // Home dashboard
 const StudentHome = () => {
+  const { user } = useContext(AuthContext);
+  const { achievements } = useContext(AchievementContext);
+  const studentId = user?.username || user?.regNo;
+
+  const myAchievementsCount = useMemo(() => {
+    return achievements.filter(a => String(a.studentId) === String(studentId)).length;
+  }, [achievements, studentId]);
+
   return (
     <div className="dashboard-content">
       <div className="student-header">
-        <h2>Student Dashboard</h2>
-        <p>Quick glance at your schedule, progress, and upcoming events.</p>
+        <h2>Welcome, {user?.name || "Student"}!</h2>
+        <p>Quick glance at your schedule, progress, and achievements.</p>
       </div>
 
       <div className="stats-grid">
@@ -191,16 +280,16 @@ const StudentHome = () => {
           <p>10:00 AM</p>
         </div>
         <div className="stat-card">
-          <h3>Upcoming Events</h3>
-          <p>3</p>
+          <h3>Achievements</h3>
+          <p>{myAchievementsCount}</p>
         </div>
         <div className="stat-card">
           <h3>Completion Progress</h3>
           <p>75%</p>
         </div>
         <div className="stat-card">
-          <h3>Certificates</h3>
-          <p>5</p>
+          <h3>Registration No</h3>
+          <p>{studentId}</p>
         </div>
       </div>
 
@@ -234,6 +323,7 @@ const StudentDashboard = () => {
         <Header title="Student Dashboard" />
         <Routes>
           <Route path="/" element={<StudentHome />} />
+          <Route path="request-achievement" element={<RequestAchievement />} />
           <Route path="schedule" element={<Schedule />} />
           <Route path="events" element={<UpcomingEvents />} />
           <Route path="progress" element={<ProgressPage />} />

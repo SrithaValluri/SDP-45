@@ -14,6 +14,9 @@ const AdminSidebar = () => {
         <NavLink to="/admin/add-students" className="sidebar-link">
           Add Students
         </NavLink>
+        <NavLink to="/admin/add-participation" className="sidebar-link">
+          Add Participation
+        </NavLink>
         <NavLink to="/admin/manage-participation" className="sidebar-link">
           Manage Participation
         </NavLink>
